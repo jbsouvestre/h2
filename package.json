@@ -5,6 +5,7 @@
   "main": "server/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "prestart": "gulp build",
     "start": "node index.js"
   },
   "author": "Jean-Baptiste Souvestre <jbsouvestre@gmail.com> (https://jbsouvestre.github.io/)",

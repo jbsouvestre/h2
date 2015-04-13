@@ -27,3 +27,5 @@ gulp.task('styles:dev', function() {
 gulp.task('build-dev', ['styles:dev'], function() {
     gulp.watch(['public/**/*.{scss,sass}'], ['styles:dev']);
 });
+
+gulp.task('build', ['styles:dev']);
