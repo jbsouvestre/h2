@@ -42,8 +42,16 @@ $(function() {
                 console.log(inner);
                 $('#count').html(inner);
             })
-            .fail(function() {
-                alert('An error occured !');
+            .fail(function(response) {
+                var err = 'An unknown error occured';
+                try {
+                    var errors = response.responseJSON.results.error;
+                    err = errors.map(function(error){
+                        return '<div><strong>Error Code: ' + error.code + '</strong> - ' + error.message + '</div>';
+                    }).join('');
+                } catch(e){}
+
+                $('#count').html('<div class="alert alert-danger">' + err + '</div>');
             })
             .always(function() {
                 $submit.button('reset');

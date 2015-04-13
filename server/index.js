@@ -32,8 +32,15 @@ app.get('/search', function(req, res) {
                 count: totalCount
             }, query)
         }));
-    }, function() {
-        console.error('error');
+    }, function(err) {
+        res.setHeader('Content-Type', 'application/json');
+        res.status(400);
+        res.end(JSON.stringify({
+            success: false,
+            results: {
+                error: err
+            }
+        }));
     });
 });
 
@@ -48,15 +55,22 @@ function searchTwitter(params) {
 
     var promise = new RSVP.Promise(function(resolve, reject) {
 
-        function parseResults(tweets, response) {
+        function parseResults(err, tweets, response) {
+
+            if(err){
+                console.log('[ERROR]'.red, err);
+                reject(err);
+                return;
+            }
+
             console.log('[DEBUG] Successfully retrieved batch of tweets'.grey);
-            console.log('[DEBUG] contains', response.statuses.length, 'tweets');
-            totalCount += response.statuses.length;
-            console.log('[DEBUG] Request took : '.grey + response.search_metadata.completed_in);
-            if (response.search_metadata.next_results) {
-                return count(query, response.search_metadata.next_results);
+            console.log('[DEBUG] contains', tweets.statuses.length, 'tweets');
+            totalCount += tweets.statuses.length;
+            console.log('[DEBUG] Request took : '.grey + tweets.search_metadata.completed_in);
+            if (tweets.search_metadata.next_results) {
+                return count(query, tweets.search_metadata.next_results);
             } else {
-                console.log(response.search_metadata);
+                console.log(tweets.search_metadata);
                 console.log('[SUCCESS] Finished !'.green);
                 console.log('[SUCCESS] Total: ' + totalCount);
                 resolve(totalCount);
@@ -79,13 +93,11 @@ function searchTwitter(params) {
 
         console.info('[INFO] Searching for '.blue, query);
         client.get('search/tweets', query, parseResults);
-
-
     });
     return promise;
 }
 
 
 var server = app.listen(process.env.PORT || 8888, function() {
-    console.log('server started');
+    console.log('server started at %s', process.env.PORT || 8888);
 });
