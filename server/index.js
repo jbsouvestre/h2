@@ -35,8 +35,6 @@ app.get('/search', function(req, res) {
     }, function() {
         console.error('error');
     });
-
-
 });
 
 app.get('/', function(req, res) {
@@ -88,6 +86,6 @@ function searchTwitter(params) {
 }
 
 
-var server = app.listen(3000, function() {
+var server = app.listen(process.env.PORT || 8888, function() {
     console.log('server started');
 });
