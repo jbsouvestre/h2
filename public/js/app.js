@@ -38,9 +38,10 @@ $(function() {
             .done(function(response) {
                 var results = response.results;
                 console.log(results);
-                var inner = '<div> Total Tweets for <span class="text-primary">' + results.q + ' </span> : ' + results.count;
-                console.log(inner);
-                $('#count').html(inner);
+                var inner = '<div> Total Tweets for <span class="text-primary"></span> : ' + results.count + '</div>';
+                var $inner= $(inner);
+                $inner.find('span').text(results.q);
+                $('#count').html($inner);
             })
             .fail(function(response) {
                 var err = 'An unknown error occured';
