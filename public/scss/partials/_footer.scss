@@ -1,0 +1,37 @@
+$footer-height: 35px;
+
+.footer {
+    border-top: 1px solid $gray-lighter;
+    background-color: $gray-lighter;
+
+    width: 100%;
+    height: $footer-height;
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    line-height: $footer-height;
+
+    ul, li { 
+        display: inline;
+    }
+
+    li {
+        a {
+            &:first-child {
+                padding-left: 0;
+            }   
+        }
+    }
+
+    a {
+        color: $gray;
+        padding: 0 $padding-base-horizontal;
+
+        &:hover {
+            color: $gray-dark;
+            text-decoration: none;
+        }
+    }
+}

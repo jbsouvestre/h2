@@ -1,6 +1,18 @@
 $(function() {
     'use strict';
 
+    /*$.get('/countries').then(function(countries) {
+        $('[name=countries]').typeahead({
+            source: countries
+        });
+    });*/
+
+    $.get('/languages').then(function(countries) {
+        $('[name=lang]').typeahead({
+            source: countries
+        });
+    });
+
     $.fn.serializeObject = function() {
         var o = {};
         var a = this.serializeArray();
@@ -39,7 +51,7 @@ $(function() {
                 var results = response.results;
                 console.log(results);
                 var inner = '<div> Total Tweets for <span class="text-primary"></span> : ' + results.count + '</div>';
-                var $inner= $(inner);
+                var $inner = $(inner);
                 $inner.find('span').text(results.q);
                 $('#count').html($inner);
             })
@@ -47,12 +59,15 @@ $(function() {
                 var err = 'An unknown error occured';
                 try {
                     var errors = response.responseJSON.results.error;
-                    err = errors.map(function(error){
-                        return '<div><strong>Error Code: ' + error.code + '</strong> - ' + error.message + '</div>';
+                    err = errors.map(function(error) {
+                        return '<span><strong>Error Code: ' + error.code + '</strong> - ' + error.message + '</span>';
                     }).join('');
-                } catch(e){}
+                } catch (e) {}
 
-                $('#count').html('<div class="alert alert-danger">' + err + '</div>');
+                $('#count').html('<div class="alert alert-danger">' +
+                    err +
+                    '. <a href="https://dev.twitter.com/overview/api/response-codes" target="_blank">Learn More</a></div>'
+                );
             })
             .always(function() {
                 $submit.button('reset');

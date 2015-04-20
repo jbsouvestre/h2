@@ -2,13 +2,14 @@
 // -------
 @import 'variables';
 
-
 // Libs
 // ----
-
 @import 'bootstrap';
 @import 'font-awesome';
 @import 'bootswatch';
+@import 'flag-icon';
 
-// Vendors
+// Partials
 // -------
+@import 'partials/main';
+@import 'partials/footer';

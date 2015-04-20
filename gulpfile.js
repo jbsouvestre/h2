@@ -1,3 +1,4 @@
+/*jshint node: true, strict: false*/
 var gulp = require('gulp');
 var path = require('path');
 var sass = require('gulp-sass');
@@ -11,10 +12,11 @@ gulp.task('styles:dev', function() {
         .pipe(sass({
             includePaths: [
                 path.join(__dirname, 'node_modules', 'bootstrap-sass', 'assets', 'stylesheets'),
-                path.join(__dirname, 'node_modules', 'font-awesome', 'scss')
+                path.join(__dirname, 'node_modules', 'font-awesome', 'scss'),
+                path.join(__dirname, 'public', 'bower_components', 'flag-icon-css', 'sass'),
             ],
             onError: function(err) {
-                throw new gutil.PluginError('webpack-dev-server', err);
+                throw new gutil.PluginError('styles:dev', err);
             }
         }))
         .pipe(autoprefixer({

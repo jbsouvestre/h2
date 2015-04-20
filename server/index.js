@@ -5,12 +5,25 @@ var utils = require('./utils');
 var colors = require('colors');
 var _ = require('underscore');
 
+var countries = require('country-data').countries.all;
+var languages = require('country-data').languages.all;
+
 var express = require('express');
 var Twitter = require('twitter');
 
 var path = require('path');
+var fs = require('fs');
+
+var VERSION = require('../package.json').version;
 
 var app = express();
+
+var langJSON = _(languages).map(function(lang) {
+    return {
+        id: lang.id,
+        name: lang.name
+    };
+});
 
 app.set('views', './public');
 app.set('view engine', 'jade');
@@ -45,7 +58,27 @@ app.get('/search', function(req, res) {
 });
 
 app.get('/', function(req, res) {
-    res.render('index', {});
+    res.render('index', {
+        version: VERSION
+    });
+});
+
+app.get('/countries', function(req, res) {
+    res.setHeader('Content-Type', 'application/json');
+
+    var countriesJSON = _(countries).map(function(country) {
+        return {
+            id: country.alpha2,
+            name: country.name
+        };
+    });
+    res.end(JSON.stringify(countriesJSON));
+});
+
+
+app.get('/languages', function(req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify(langJSON));
 });
 
 
@@ -91,12 +124,18 @@ function searchTwitter(params) {
             count: 100
         }, params);
 
+        if (query.lang) {
+            query.lang = require('country-data').lookup.languages({
+                name: query.lang
+            })[0].alpha2;
+
+        }
+
         console.info('[INFO] Searching for '.blue, query);
         client.get('search/tweets', query, parseResults);
     });
     return promise;
 }
-
 
 var server = app.listen(process.env.PORT || 8888, function() {
     console.log('server started at %s', process.env.PORT || 8888);
