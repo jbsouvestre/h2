@@ -48,16 +48,16 @@ app.get('/', function(req, res) {
     res.render('index', {});
 });
 
-var totalCount = 0;
 
 function searchTwitter(params) {
+    var totalCount = 0;
     var client = new Twitter(config);
 
     var promise = new RSVP.Promise(function(resolve, reject) {
 
         function parseResults(err, tweets, response) {
 
-            if(err){
+            if (err) {
                 console.log('[ERROR]'.red, err);
                 reject(err);
                 return;
